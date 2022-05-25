@@ -36,6 +36,21 @@ async function run() {
       res.send(tool);
     });
 
+    app.put("/tool/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateTool = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          name: updateTool.name,
+          price: updateTool.price,
+        },
+      };
+      const result = await toolCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+    });
+
     app.get("/order", async (req, res) => {
       const customer = req.query.customer;
       const query = { customer: customer };
