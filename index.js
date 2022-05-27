@@ -38,6 +38,7 @@ async function run() {
     const toolCollection = client.db("homeMart").collection("tool");
     const orderCollection = client.db("homeMart").collection("order");
     const userCollection = client.db("homeMart").collection("user");
+    const reviewCollection = client.db("homeMart").collection("review");
 
     const verifyAdmin = async (req, res, next) => {
       const requester = req.decoded.email;
@@ -125,6 +126,17 @@ async function run() {
     app.post("/order", async (req, res) => {
       const order = req.body;
       const result = await orderCollection.insertOne(order);
+      res.send(result);
+    });
+
+    app.get("/review", async (req, res) => {
+      const review = await reviewCollection.find().toArray();
+      res.send(review);
+    });
+
+    app.post("/review", async (req, res) => {
+      const review = req.body;
+      const result = await reviewCollection.insertOne(review);
       res.send(result);
     });
   } finally {
