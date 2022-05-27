@@ -39,6 +39,7 @@ async function run() {
     const orderCollection = client.db("homeMart").collection("order");
     const userCollection = client.db("homeMart").collection("user");
 
+
     app.get("/tool", async (req, res) => {
       const query = {};
       const cursor = toolCollection.find(query);
@@ -57,6 +58,12 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const tool = await toolCollection.findOne(query);
       res.send(tool);
+    });
+
+
+    app.get('/user', verifyJWT, async (req, res) => {
+      const users = await userCollection.find().toArray();
+      res.send(users);
     });
 
     app.put("/user/:email", async (req, res) => {
